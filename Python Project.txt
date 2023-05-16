@@ -1,0 +1,350 @@
+﻿# Name:  ROHITH REDDY
+# DATE:  04/19/2023
+
+
+# READ ME:
+# What my program does
+# Ask for file name: without file name no functionality will work.
+# If file name doesn't exist: creates one.
+# If data file is empty: error is printed out.
+# No need to mention .txt if mentioned error is printed out
+# My program displays,sorts in the tkinter window and also appends the list of numbers to the file.
+# My program cleans the file specified, only integers,no special characters.
+# If any special characters present in file, program removes it from file.
+# My program search for a number and prints out occurrences even if its 0 it prints outs 0.
+# My program encrypts the number by adding a random number and keeping that random number as the last-
+# digit of the original number.
+# My program displays the encrypted numbers in tkinter window doesn't write to file
+# My program decrypts the number by dividing the number by 10 and gets last digit and subtracts it-
+# from original number.
+# My program doesn't allow decryption before encryption
+
+
+# DRAWBACKS: Special cases
+# My program cares for only integers, no decimal numbers, no special characters.
+# If file consist deliminators like (,)(.) it is considered as a special characters during file cleaning
+# my program removes them.
+# Only the file with list of integer numbers on separate lines.
+# When appending the number gets space before and after to avoid ambiguity and added to the file.
+
+
+# *****Professor try to find special cases errors on my program*****
+
+
+
+
+
+
+import random
+from tkinter import *
+import os
+
+
+p = Tk()
+
+
+p.geometry("300x300")
+
+
+p.title('Python Project - ver1')
+
+
+Label(p, text='UNH Scripting w/Python').pack()
+
+
+text = StringVar()
+
+
+
+
+class Options:
+
+
+   def __init__(self):
+       self.e = None
+       self.l = None
+
+
+   def file(self, p1):
+       s = text.get()
+       if "." in s:
+           t = "Error! Remove extension(.txt)."
+           displayerror(t)
+       else:
+           self.e = s + ".txt"
+           f = open(self.e, "a+")
+           p1.destroy()
+           label.config(text=f'Current data file being processed: {self.e}', fg="red")
+
+
+   def display(self):
+       s = 0
+       i = 0
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           txt_output = Text(p3, height=300, width=300)
+           txt_output.pack(pady=30)
+           f = open(self.e, "r")
+           txt_output.insert(END, "All Numbers" + "\n")
+           for x in f:
+               if x != '\n':
+                   txt_output.insert(END, x)
+                   s += int(x)
+                   i += 1
+           avg = s / i
+           txt_output.insert(END, "Total" + " = ")
+           txt_output.insert(END, str(s) + "\n")
+           txt_output.insert(END, "Average" + " = ")
+           txt_output.insert(END, str(avg) + "\n")
+           p3.grab_set()
+
+
+   def sorted(self):
+       List = []
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           txt_output = Text(p3, height=300, width=300)
+           txt_output.pack(pady=30)
+           f = open(self.e, "r")
+           txt_output.insert(END, "Smallest to Largest Numbers" + "\n")
+           for x in f:
+               if x != '\n':
+                   List.append(int(x))
+           x = sorted(List)
+           for i in x:
+               txt_output.insert(END, str(i) + "\n")
+           p3.grab_set()
+
+
+   def search(self):
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           Label(p3, text='Enter The Number: ').pack()
+           Entry(p3, width=13, textvariable=text).pack()
+           Button(p3, text='Submit', width=13, command=lambda: search1(self.e, txt_output)).pack()
+           Label(p3, text="The number of times that number occurred: ").pack()
+           txt_output = Label(p3)
+           txt_output.pack()
+           p3.grab_set()
+
+
+   def Largest(self):
+       List = []
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           txt_output = Text(p3, height=300, width=300)
+           txt_output.pack(pady=30)
+           f = open(self.e, "r")
+           txt_output.insert(END, "The Largest Number is: " + "\n")
+           for x in f:
+               if x != '\n':
+                   List.append(int(x))
+           x = sorted(List)
+           txt_output.insert(END, str(x[len(List) - 1]))
+           p3.grab_set()
+
+
+   def append(self):
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           Label(p3, text='Enter The Number: ').pack()
+           Entry(p3, width=13, textvariable=text).pack()
+           Button(p3, text='Submit', width=13, command=lambda: append1(self.e)).pack()
+           p3.grab_set()
+
+
+   def encrypt(self):
+       self.l = []
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           txt_output = Text(p3, height=300, width=300)
+           txt_output.pack(pady=30)
+           f = open(self.e, "r")
+           txt_output.insert(END, "After Encryption the list of numbers are: " + "\n")
+           for x in f:
+               if x != '\n':
+                   s = random.randint(0, 9)
+                   y = int(x) + s
+                   y = str(y) + str(s)
+                   self.l.append(int(y))
+                   txt_output.insert(END, y + '\n')
+           p3.grab_set()
+
+
+   def decrypt(self):
+       i = 0
+       if self.e is None:
+           t = "Enter File Name First"
+           displayerror(t)
+       elif self.l is None:
+           t = "Encrypt the file First"
+           displayerror(t)
+       elif os.path.getsize(self.e) == 0:
+           t = "File is Empty"
+           displayerror(t)
+       else:
+           self.filecleaning()
+           p3 = Toplevel(p)
+           p3.geometry("300x300")
+           p3.title('Python Project - ver1')
+           txt_output = Text(p3, height=300, width=300)
+           txt_output.pack(pady=30)
+           f = open(self.e, "r")
+           txt_output.insert(END, "After Decryption the list of numbers are: " + "\n")
+           for x in f:
+               if x != '\n':
+                   s = self.l[i] - (10 * int(self.l[i] / 10))
+                   self.l[i] = self.l[i] // 10
+                   s = self.l[i] - s
+                   i += 1
+                   txt_output.insert(END, str(s) + '\n')
+           self.l = None
+           p3.grab_set()
+
+
+   def filecleaning(self):
+       s = 0
+       with open(self.e, "r") as fp:
+           lines = fp.readlines()
+
+
+       with open(self.e, "w") as fp:
+           for line in lines:
+               try:
+                   s = int(line)
+               except ValueError:
+                   line = '\n'
+               fp.write(line)
+
+
+
+
+obj = Options()
+
+
+
+
+def append1(e):
+   s = text.get()
+   if s == '':
+       t = 'Enter any number'
+       displayerror(t)
+   try:
+       y = int(s)
+       f = open(e, "a")
+       f.write('\n' + s + '\n')
+   except ValueError:
+       t = 'Enter integers only'
+       displayerror(t)
+
+
+
+
+def search1(e, txt_output):
+   i = 0
+   s = text.get()
+   if s == '':
+       t = 'Enter any number'
+       displayerror(t)
+   try:
+       y = int(s)
+       f = open(e, "r")
+       for x in f:
+           if x != '\n':
+               if x.strip('\n') == str(y):
+                   i += 1
+       txt_output.config(text=str(i))
+   except ValueError:
+       t = 'Enter integers only'
+       displayerror(t)
+
+
+
+
+def displayerror(t):
+   p2 = Toplevel(p)
+   p2.geometry("200x200")
+   p2.title('Python Project - ver1')
+   Label(p2, text=t, fg="red").place(relx=0.5, rely=0.3, anchor=CENTER)
+   p2.grab_set()
+
+
+
+
+def window():
+   p1 = Toplevel(p)
+   p1.geometry("300x300")
+   p1.title('Python Project - ver1')
+   Label(p1, text='Enter File Name: ').place(relx=0.5, rely=0.3, anchor=CENTER)
+   Label(p1, text='(.txt file extension will be added automatically)', fg="red").place(relx=0.5, rely=0.4,
+                                                                                       anchor=CENTER)
+   Entry(p1, width=13, textvariable=text).place(relx=0.5, rely=0.5, anchor=CENTER)
+   Button(p1, text='Submit', width=13, command=lambda: obj.file(p1)).place(relx=0.5, rely=0.6, anchor=CENTER)
+   p1.grab_set()
+
+
+
+
+label = Label(p, text='Current data file being processed: None', fg="red")
+label.pack()
+Button(p, text='Select / Create data file', width=13, command=window).pack()
+Button(p, text='Display all', width=13, command=obj.display).pack()
+Button(p, text='Sorted Display', width=13, command=obj.sorted).pack()
+Button(p, text='Search/Occurs', width=13, command=obj.search).pack()
+Button(p, text='Largest Number', width=13, command=obj.Largest).pack()
+Button(p, text='Append Number', width=13, command=obj.append).pack()
+Button(p, text='Encrypt', width=13, command=obj.encrypt).pack()
+Button(p, text='Decrypt', width=13, command=obj.decrypt).pack()
+Button(p, text='EXIT', width=13, command=lambda: p.destroy()).pack()
+p.mainloop()
